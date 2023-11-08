@@ -20,43 +20,50 @@
 
       <div>
         <q-btn label="Log in" type="submit" color="orange" />
-        <q-btn label="Register" type="reset" color="red" class="q-ml-sm" />
+        <q-btn
+          label="Register"
+          color="red"
+          class="q-ml-sm"
+          @click="this.$router.push('/register')"
+        />
       </div>
     </q-form>
   </div>
 </template>
 
 <script>
+import { useUserStore } from "src/Stores/user";
+import { api } from "src/boot/axios";
 import { defineComponent } from "vue";
-import { useUserStore } from "@vueuse/core";
 
 export default defineComponent({
   name: "LoginPage",
   data() {
-    const userStore = useUserStore;
+    const userStore = useUserStore();
     return {
-      username: "",
-      password: "",
+      username: "loverr",
+      password: "123456",
       userStore,
       user: {},
     };
   },
   methods: {
-    loginUser() {
-      const userLogin = {
-        username: this.username,
-        password: this.password,
-      };
-      this.$api
-        .post("/user/login", userLogin)
-        .then((res) => {
-          this.userStore.user = res.userLogin;
-          console.log(res.data);
-          this.$router.push("/menu");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    async loginUser() {
+      try {
+        const userLogin = {
+          username: this.username,
+          password: this.password,
+        };
+        const res = await api.post("/user/login", userLogin);
+
+        // this.userStore.user.username = res.data.username;
+        // this.userStore.user.password = res.data.password;
+        // this.userStore.user.accessToken = res.data.accessToken;
+
+        this.userStore.user = res.data;
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 });

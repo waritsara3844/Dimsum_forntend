@@ -21,16 +21,6 @@
           lazy-rules
           :rules="[requiredValidate]"
         />
-        <text-caption
-          style="font-size: 0.9em"
-          v-if="usernameCaption.showStatus"
-          :class="[
-            usernameCaption.showClass ? 'text-positive' : 'text-negative',
-          ]"
-        >
-          <q-icon :name="usernameCaption.icon" size="1.5em" />
-          {{ usernameCaption.msg }}</text-caption
-        >
       </div>
       <div>
         <q-input
@@ -72,47 +62,11 @@ export default defineComponent({
       username: null,
       password: null,
       isPwd: true,
-      usernameCaption: {
-        showStatus: false,
-        showClass: false,
-        icon: null,
-        msg: null,
-      },
     };
   },
   methods: {
     emailValidate,
     requiredValidate,
-    usernameValidate() {
-      if (this.username) {
-        this.$api
-          .get("/user/" + this.username)
-          .then((response) => {
-            if (response.data.valid) {
-              this.usernameCaption.showStatus = true;
-              this.usernameCaption.showClass = true;
-              this.usernameCaption.icon = "check_circle";
-              this.usernameCaption.msg = "This username is Available.";
-            } else {
-              this.usernameCaption.showStatus = true;
-              this.usernameCaption.showClass = false;
-              this.usernameCaption.icon = "highlight_off";
-              this.usernameCaption.msg = "This username is NOT Available.";
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      } else {
-        this.resetUserCaption();
-      }
-    },
-    resetUserCaption() {
-      this.usernameCaption.showStatus = false;
-      this.usernameCaption.showClass = false;
-      this.usernameCaption.icon = null;
-      this.usernameCaption.msg = null;
-    },
     onSubmit() {
       const newUser = {
         email: this.email,
@@ -131,11 +85,6 @@ export default defineComponent({
     },
     onReset() {
       (this.username = null), (this.email = null), (this.password = null);
-    },
-  },
-  watch: {
-    username() {
-      this.usernameValidate();
     },
   },
 });
