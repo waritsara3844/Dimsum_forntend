@@ -1,0 +1,142 @@
+<template>
+  <div class="q-pa-md" style="max-width: 400px">
+    <div class="row justify-center text-h6 text-bold">Register</div>
+    <q-form @submit.prevent="onSubmit" @reset.prevent="onReset" class="q-mt-sm">
+      <div>
+        <q-input
+          filled
+          v-model="email"
+          type="text"
+          label="Please type your Email"
+          lazy-rules
+          :rules="[emailValidate, requiredValidate]"
+        />
+      </div>
+      <div>
+        <q-input
+          filled
+          type="text"
+          v-model="username"
+          label="Please type your username"
+          lazy-rules
+          :rules="[requiredValidate]"
+        />
+        <text-caption
+          style="font-size: 0.9em"
+          v-if="usernameCaption.showStatus"
+          :class="[
+            usernameCaption.showClass ? 'text-positive' : 'text-negative',
+          ]"
+        >
+          <q-icon :name="usernameCaption.icon" size="1.5em" />
+          {{ usernameCaption.msg }}</text-caption
+        >
+      </div>
+      <div>
+        <q-input
+          filled
+          v-model="password"
+          :type="isPwd ? 'password' : 'text'"
+          label="Please type your password"
+          lazy-rules
+          :rules="[
+            (val) =>
+              (val && val.length >= 6) || 'Must be 6 characters at least.',
+          ]"
+        >
+          <template v-slot:append>
+            <q-icon
+              @click="isPwd = !isPwd"
+              :name="isPwd ? 'visibility_off' : 'visibility'"
+            />
+          </template>
+        </q-input>
+      </div>
+      <div>
+        <q-btn label="Submit" type="submit" color="orange" />
+        <q-btn label="Reset" type="reset" color="red" flat class="q-ml-sm" />
+      </div>
+    </q-form>
+  </div>
+</template>
+
+<script>
+import { defineComponent } from "vue";
+import { emailValidate, requiredValidate } from "../utils/validations";
+
+export default defineComponent({
+  name: "ReqisterPage",
+  data() {
+    return {
+      email: null,
+      username: null,
+      password: null,
+      isPwd: true,
+      usernameCaption: {
+        showStatus: false,
+        showClass: false,
+        icon: null,
+        msg: null,
+      },
+    };
+  },
+  methods: {
+    emailValidate,
+    requiredValidate,
+    usernameValidate() {
+      if (this.username) {
+        this.$api
+          .get("/user/" + this.username)
+          .then((response) => {
+            if (response.data.valid) {
+              this.usernameCaption.showStatus = true;
+              this.usernameCaption.showClass = true;
+              this.usernameCaption.icon = "check_circle";
+              this.usernameCaption.msg = "This username is Available.";
+            } else {
+              this.usernameCaption.showStatus = true;
+              this.usernameCaption.showClass = false;
+              this.usernameCaption.icon = "highlight_off";
+              this.usernameCaption.msg = "This username is NOT Available.";
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        this.resetUserCaption();
+      }
+    },
+    resetUserCaption() {
+      this.usernameCaption.showStatus = false;
+      this.usernameCaption.showClass = false;
+      this.usernameCaption.icon = null;
+      this.usernameCaption.msg = null;
+    },
+    onSubmit() {
+      const newUser = {
+        email: this.email,
+        username: this.username,
+        password: this.password,
+      };
+      this.$api
+        .post("/user/signup", newUser)
+        .then((res) => {
+          console.log(res);
+          this.$router.push("/login");
+        })
+        .catch((err) => {
+          err;
+        });
+    },
+    onReset() {
+      (this.username = null), (this.email = null), (this.password = null);
+    },
+  },
+  watch: {
+    username() {
+      this.usernameValidate();
+    },
+  },
+});
+</script>
