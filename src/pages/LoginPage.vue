@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md" style="max-width: 400px">
+  <div class="q-pa-md" style="max-width: 1080px">
     <div class="row justify-center text-h6 text-bold">Login</div>
     <q-form
       @submit.prevent="loginUser"
@@ -40,9 +40,10 @@ export default defineComponent({
   name: "LoginPage",
   data() {
     const userStore = useUserStore();
+
     return {
-      username: "loverr",
-      password: "123456",
+      username: "",
+      password: "",
       userStore,
       user: {},
     };
@@ -55,15 +56,15 @@ export default defineComponent({
           password: this.password,
         };
         const res = await api.post("/user/login", userLogin);
-
-        // this.userStore.user.username = res.data.username;
-        // this.userStore.user.password = res.data.password;
-        // this.userStore.user.accessToken = res.data.accessToken;
-
         this.userStore.user = res.data;
+        this.$router.push("/menu");
       } catch (error) {
         console.log(error);
       }
+    },
+    onReset() {
+      this.username = "";
+      this.password = "";
     },
   },
 });

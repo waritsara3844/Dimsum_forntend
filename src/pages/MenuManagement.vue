@@ -1,12 +1,120 @@
+<!-- eslint-disable vue/no-parsing-error -->
+<!-- eslint-disable vue/valid-v-for -->
 <template>
-  <q-page class="q-pa-md">
-    <div class="text-h1">Menu Management</div>
+  <q-page class="q-px-md">
+    <div class="q-gutter-y-sm">
+      <div class="row justify-between">
+        <div class="text-subtitle1 text-bold q-mt-md">All munu</div>
+        <q-btn
+          color="orange"
+          class="q-mt-md"
+          label="ADD"
+          style="border-radius: 20px"
+          @click="showDialog"
+        />
+      </div>
+      <MenuAdd
+        :isVisible="isDialogVisible"
+        v-model="isDialogVisible"
+        @updateVisible="updateDialogVisibility"
+        @addmenu="addMenu"
+      />
+      <MenuEdit
+        class="q-my-md"
+        v-for="allmenu in allmenus"
+        :key="allmenu.id"
+        :menuName="allmenu.name"
+        :menuDetail="allmenu.detail"
+        :menuPrice="allmenu.price"
+        :menuCategory="allmenu.category"
+        :menuSold="allmenu.sold_amount"
+        :menuId="allmenu.id"
+        :isEditing="isEditing"
+        @deleteMenuItem="deleteMenu(allmenu.id)"
+      />
+    </div>
   </q-page>
 </template>
 
 <script>
 import { defineComponent } from "vue";
+import { useUserStore } from "src/Stores/user";
+import MenuEdit from "src/components/MenuEdit.vue";
+import MenuAdd from "src/components/MenuAdd.vue";
+import { ref } from "vue";
+import { api } from "src/boot/axios";
+
 export default defineComponent({
   name: "MenuManagement",
+  data() {
+    const userStore = useUserStore();
+    const accessToken = userStore.user.accessToken;
+    return {
+      userStore,
+      accessToken,
+      allmenus: [],
+      tab: "all",
+      isDialogVisible: ref(false),
+      isEditing: false,
+    };
+  },
+  created() {
+    this.getAllMenu();
+  },
+
+  methods: {
+    getAllMenu() {
+      const headerss = {
+        "x-access-token": `${this.accessToken}`,
+      };
+      this.$api
+        .get("/menu/", { headers: headerss })
+        .then((res) => {
+          this.allmenus = res.data;
+          console.log(res);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    },
+    showDialog() {
+      this.isDialogVisible = true;
+      console.log(this.isDialogVisible);
+    },
+    updateDialogVisibility(newValue) {
+      // Update the dialog visibility based on the emitted value from the child component
+      this.isDialogVisible = newValue;
+    },
+    async addMenu(menuData) {
+      try {
+        const headerss = {
+          "x-access-token": `${this.accessToken}`,
+        };
+        const response = await api.post("/menu/addmenu", menuData, {
+          headers: headerss,
+        });
+        console.log("Menu added:", response.data);
+        this.isDialogVisible = false;
+      } catch (error) {
+        console.log("Error adding menu", error);
+      }
+    },
+    async deleteMenu(id) {
+      try {
+        const headerss = {
+          "x-access-token": `${this.accessToken}`,
+        };
+        const response = await api.delete(`/menu/${id}`, { headers: headerss });
+        const deleteIndex = this.allmenus.findIndex((menus) => menus.id === id);
+        if (deleteIndex !== -1) {
+          this.allmenus.splice(deleteIndex, 1);
+        }
+        console.log("Menu deleted:", response.data);
+      } catch (error) {
+        console.log("Error deletingd menu", error);
+      }
+    },
+  },
+  components: { MenuEdit, MenuAdd },
 });
 </script>
