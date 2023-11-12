@@ -3,7 +3,7 @@
     <div class="q-pa-md">
       <div class="text-subtitle2 text-bold row justify-between">
         <div>{{ menuName }}</div>
-        <div>{{ menuPrice }}</div>
+        <div>{{ menuPrice }} Bath</div>
       </div>
       <div class="text-grey q-pt-md">
         Category: <span class="text-black">{{ menuCategory }}</span>
@@ -12,7 +12,8 @@
         Sold out: <span class="text-black">{{ menuSold }}</span>
       </div>
       <div class="text-grey q-pt-md">
-        Detail: <span class="text-black">{{ menuDetail }}</span>
+        Detail:
+        <span class="text-black">{{ menuDetail }}</span>
       </div>
       <div class="row justify-center q-mt-md">
         <q-btn
@@ -35,7 +36,7 @@
       </div>
     </div>
 
-    <!-- Edit Dialog -->
+    <!-- q-dialog for editing -->
     <q-dialog v-model="isEditDialogVisible" align="center" class="text-grey-9">
       <q-card>
         <q-card-section>
@@ -49,7 +50,7 @@
           <q-btn
             label="Save"
             color="green-5"
-            @click="saveEditMenu"
+            @click="saveEditedMenu"
             style="border-radius: 15px"
             no-caps
           />
@@ -57,7 +58,7 @@
             label="Cancel"
             text-color="red"
             color="red-3"
-            @click="cancelEditMenu"
+            @click="closeEditDialog"
             style="border-radius: 15px"
             no-caps
           />
@@ -82,32 +83,35 @@ export default defineComponent({
   },
   data() {
     return {
-      isEditDialogVisible: false, // Control dialog visibility
+      isEditDialogVisible: false,
       editedMenuName: this.menuName,
-      editedMenuDetail: this.menuDetail,
       editedMenuPrice: this.menuPrice,
       editedMenuCategory: this.menuCategory,
+      editedMenuDetail: this.menuDetail,
     };
   },
   methods: {
     openEditDialog() {
+      // Open the edit dialog when "Edit" button is clicked
       this.isEditDialogVisible = true;
     },
-    saveEditMenu() {
-      // Perform save operations here
-      // Once saved, close the dialog
+    closeEditDialog() {
+      // Close the edit dialog when "Cancel" button is clicked
       this.isEditDialogVisible = false;
-      // Emit an event to notify the parent component of the changes
-      this.$emit("editMenuItem", {
-        id: this.menuId,
-        editedMenuName: this.editedMenuName,
-        editedMenuDetail: this.editedMenuDetail,
-        editedMenuPrice: this.editedMenuPrice,
-        editedMenuCategory: this.editedMenuCategory,
-      });
     },
-    cancelEditMenu() {
-      // Discard changes and close the dialog
+    saveEditedMenu() {
+      // Implement the logic to save the edited menu here
+      // You can use this.editedMenuName, this.editedMenuPrice, etc., to access the edited data
+      // Emit an event to the parent component to handle the update
+      this.$emit("updateMenuItem", {
+        id: this.menuId,
+        name: this.editedMenuName,
+        price: this.editedMenuPrice,
+        category: this.editedMenuCategory,
+        detail: this.editedMenuDetail,
+      });
+
+      // Close the edit dialog after saving
       this.isEditDialogVisible = false;
     },
     deleteMenuItem() {

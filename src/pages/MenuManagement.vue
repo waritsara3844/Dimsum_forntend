@@ -1,10 +1,8 @@
-<!-- eslint-disable vue/no-parsing-error -->
-<!-- eslint-disable vue/valid-v-for -->
 <template>
   <q-page class="q-px-md">
     <div class="q-gutter-y-sm">
       <div class="row justify-between">
-        <div class="text-subtitle1 text-bold q-mt-md">All munu</div>
+        <div class="text-subtitle1 text-bold q-mt-md">All menu</div>
         <q-btn
           color="orange"
           class="q-mt-md"
@@ -29,12 +27,8 @@
         :menuCategory="allmenu.category"
         :menuSold="allmenu.sold_amount"
         :menuId="allmenu.id"
-        :isEditing="isEditing"
+        @updateMenuItem="updateMenu"
         @deleteMenuItem="deleteMenu(allmenu.id)"
-      />
-      <MenuDialog
-        :isEditDialogVisible="isEditDialogVisible"
-        @closeEditDialog="isEditDialogVisible = false"
       />
     </div>
   </q-page>
@@ -47,7 +41,6 @@ import MenuEdit from "src/components/MenuEdit.vue";
 import MenuAdd from "src/components/MenuAdd.vue";
 import { ref } from "vue";
 import { api } from "src/boot/axios";
-import MenuDialog from "src/components/MenuDialog.vue";
 
 export default defineComponent({
   name: "MenuManagement",
@@ -116,10 +109,36 @@ export default defineComponent({
         }
         console.log("Menu deleted:", response.data);
       } catch (error) {
-        console.log("Error deletingd menu", error);
+        console.log("Error deleting menu", error);
+      }
+    },
+    async updateMenu(menuData) {
+      try {
+        const headerss = {
+          "x-access-token": `${this.accessToken}`,
+        };
+        const response = await api.put(`/menu/${menuData.id}`, menuData, {
+          headers: headerss,
+        });
+        console.log("Menu updated:", response.data);
+        // Find the updated menu in allmenus and update its data
+        const updatedMenuIndex = this.allmenus.findIndex(
+          (menu) => menu.id === menuData.id
+        );
+        if (updatedMenuIndex !== -1) {
+          const updatedMenu = this.allmenus[updatedMenuIndex];
+          updatedMenu.name = menuData.name;
+          updatedMenu.price = menuData.price;
+          updatedMenu.category = menuData.category;
+          updatedMenu.detail = menuData.detail;
+        }
+        // Close the edit dialog
+        this.isEditing = false;
+      } catch (error) {
+        console.log("Error updating menu", error);
       }
     },
   },
-  components: { MenuEdit, MenuAdd, MenuDialog },
+  components: { MenuEdit, MenuAdd },
 });
 </script>
