@@ -1,9 +1,7 @@
-<!-- eslint-disable vue/no-parsing-error -->
-<!-- eslint-disable vue/valid-v-for -->
 <template>
   <q-page class="q-pa-md row justify-center">
     <div class="text-subtitle1 text-bold">Categories</div>
-    <div>
+    <div class="q-pt-md" style="max-width: 400px">
       <q-tabs
         v-model="tab"
         align="justify"
@@ -12,9 +10,12 @@
         no-caps
       >
         <q-tab name="all" label="All menu" />
-        <q-tab name="dimsum" label="Dimsum" />
-        <q-tab name="drink" label="Drinks" />
-        <q-tab name="seafood" label="Seafood" />
+        <q-tab
+          v-for="category in categories"
+          :key="category"
+          :name="category"
+          :label="category"
+        />
       </q-tabs>
 
       <div class="q-gutter-y-lg">
@@ -23,26 +24,31 @@
             <MenuCard
               class="q-my-md"
               v-for="allmenu in allmenus"
-              :key="id"
+              :key="allmenu.id"
               :menuName="allmenu.name"
               :menuDetail="allmenu.detail"
               :menuPrice="allmenu.price"
               :menuCategory="allmenu.category"
               :menuSold="allmenu.sold_amount"
+              :menuBuy="a"
             />
           </q-tab-panel>
-        </q-tab-panels>
-
-        <q-tab-panels
-          v-model="drink"
-          animated
-          transition-prev="fade"
-          transition-next="fade"
-          class="bg-orange text-white text-center"
-        >
-          <q-tab-panel name="mails">
-            <div class="text-h6">Mails</div>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          <q-tab-panel
+            v-for="category in categories"
+            :key="category"
+            :name="category"
+          >
+            <MenuCard
+              class="q-my-md"
+              v-for="menu in filteredMenus(category)"
+              :key="menu.id"
+              :menuName="menu.name"
+              :menuDetail="menu.detail"
+              :menuPrice="menu.price"
+              :menuCategory="menu.category"
+              :menuSold="menu.sold_amount"
+              :menuBuy="a"
+            />
           </q-tab-panel>
         </q-tab-panels>
       </div>
@@ -67,6 +73,12 @@ export default defineComponent({
       tab: "all",
     };
   },
+  computed: {
+    categories() {
+      // Get unique categories from allmenus
+      return [...new Set(this.allmenus.map((menu) => menu.category))];
+    },
+  },
   created() {
     this.getAllMenu();
   },
@@ -84,6 +96,10 @@ export default defineComponent({
         .catch((err) => {
           console.error(err);
         });
+    },
+    filteredMenus(category) {
+      // Filter menus by category
+      return this.allmenus.filter((menu) => menu.category === category);
     },
   },
   components: { MenuCard },

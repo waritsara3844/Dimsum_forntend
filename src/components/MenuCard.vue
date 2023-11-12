@@ -15,6 +15,33 @@
         detail:
         <span class="text-black">{{ menuDetail }}</span>
       </div>
+      <div class="row justify-end">
+        <q-icon name="add" size="20px" color="orange-9" @click="addMenuBuy()" />
+        <div class="q-mx-sm text-bold">{{ menuBuy }}</div>
+        <q-icon
+          name="remove"
+          size="20px"
+          color="orange-9"
+          @click="removeMenuBuy()"
+        />
+      </div>
+      <div align="center" class="q-pt-md" v-if="menuBuy > 0">
+        <q-btn
+          color="green-3"
+          label="Confirm"
+          text-color="green"
+          style="border-radius: 15px"
+          no-caps
+          class="q-mr-sm"
+        />
+        <q-btn
+          color="red-3"
+          label="Cancel"
+          text-color="red"
+          style="border-radius: 15px"
+          no-caps
+        />
+      </div>
     </div>
   </q-card>
 </template>
@@ -31,6 +58,21 @@ export default defineComponent({
     menuPrice: Number,
     menuCategory: String,
     menuSold: Number,
+  },
+  data() {
+    return {
+      menuBuy: 0,
+    };
+  },
+  methods: {
+    addMenuBuy() {
+      this.menuBuy++;
+    },
+    removeMenuBuy() {
+      if (this.menuBuy > 0) {
+        this.menuBuy--;
+      }
+    },
   },
 });
 </script>

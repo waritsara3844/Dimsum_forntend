@@ -61,9 +61,13 @@ export default {
         name: this.menuName,
         detail: this.menuDetail,
         price: this.menuPrice,
-        catagory: this.menuCategory,
+        category: this.menuCategory,
       };
       console.log(menuData);
+      this.menuName = "";
+      this.menuDetail = "";
+      this.menuPrice = "";
+      this.menuCategory = "";
       this.$emit("addmenu", menuData);
     },
   },

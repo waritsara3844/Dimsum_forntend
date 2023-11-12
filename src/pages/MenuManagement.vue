@@ -32,6 +32,10 @@
         :isEditing="isEditing"
         @deleteMenuItem="deleteMenu(allmenu.id)"
       />
+      <MenuDialog
+        :isEditDialogVisible="isEditDialogVisible"
+        @closeEditDialog="isEditDialogVisible = false"
+      />
     </div>
   </q-page>
 </template>
@@ -43,6 +47,7 @@ import MenuEdit from "src/components/MenuEdit.vue";
 import MenuAdd from "src/components/MenuAdd.vue";
 import { ref } from "vue";
 import { api } from "src/boot/axios";
+import MenuDialog from "src/components/MenuDialog.vue";
 
 export default defineComponent({
   name: "MenuManagement",
@@ -115,6 +120,6 @@ export default defineComponent({
       }
     },
   },
-  components: { MenuEdit, MenuAdd },
+  components: { MenuEdit, MenuAdd, MenuDialog },
 });
 </script>
