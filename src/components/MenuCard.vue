@@ -1,18 +1,49 @@
 <template>
-  <div class="q-pa-md">
-    <q-card class="my-card" flat bordered>
-      <q-img src="https://cdn.quasar.dev/img/parallax2.jpg" />
-
-      <q-card-section>
-        <div class="text-h6 q-mt-sm">{{ menuName }}</div>
-        <div class="text-subtitle1 text-grey">{{ menuDetail }}</div>
-        <div class="text-h6 text-bold q-mt-md">{{ menuPrice }}</div>
-        <q-card-actions class="row justify-end">
-          <q-btn flat color="orange" label="Add" />
-        </q-card-actions>
-      </q-card-section>
-    </q-card>
-  </div>
+  <q-card>
+    <div class="q-pa-md">
+      <div class="text-subtitle2 text-bold row justify-between">
+        <div>{{ menuName }}</div>
+        <div>{{ menuPrice }} Bath</div>
+      </div>
+      <div class="text-grey q-pt-md">
+        Catagory: <span class="text-black">{{ menuCategory }}</span>
+      </div>
+      <div class="text-grey q-pt-md">
+        Sold out: <span class="text-black">{{ menuSold }}</span>
+      </div>
+      <div class="text-grey q-pt-md">
+        detail:
+        <span class="text-black">{{ menuDetail }}</span>
+      </div>
+      <div class="row justify-end">
+        <q-icon name="add" size="20px" color="orange-9" @click="addMenuBuy()" />
+        <div class="q-mx-sm text-bold">{{ menuBuy }}</div>
+        <q-icon
+          name="remove"
+          size="20px"
+          color="orange-9"
+          @click="removeMenuBuy()"
+        />
+      </div>
+      <div align="center" class="q-pt-md" v-if="menuBuy > 0">
+        <q-btn
+          color="green-3"
+          label="Confirm"
+          text-color="green"
+          style="border-radius: 15px"
+          no-caps
+          class="q-mr-sm"
+        />
+        <q-btn
+          color="red-3"
+          label="Cancel"
+          text-color="red"
+          style="border-radius: 15px"
+          no-caps
+        />
+      </div>
+    </div>
+  </q-card>
 </template>
 
 <script>
@@ -21,9 +52,27 @@ import { defineComponent } from "vue";
 export default defineComponent({
   name: "MenuCard",
   props: {
+    menuId: Number,
     menuName: String,
     menuDetail: String,
     menuPrice: Number,
+    menuCategory: String,
+    menuSold: Number,
+  },
+  data() {
+    return {
+      menuBuy: 0,
+    };
+  },
+  methods: {
+    addMenuBuy() {
+      this.menuBuy++;
+    },
+    removeMenuBuy() {
+      if (this.menuBuy > 0) {
+        this.menuBuy--;
+      }
+    },
   },
 });
 </script>

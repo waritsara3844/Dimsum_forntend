@@ -10,4 +10,9 @@ export const useUserStore = defineStore("user", {
       accessToken: null,
     }),
   }),
+  methods: {
+    getAccessToken: (state) => {
+      return state.user.accessToken;
+    },
+  },
 });

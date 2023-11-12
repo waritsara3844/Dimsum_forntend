@@ -1,5 +1,16 @@
 const routes = [
   {
+    path: "/login",
+    name: "login",
+    component: () => import("pages/LoginPage.vue"),
+  },
+  {
+    path: "/register",
+    name: "register",
+    component: () => import("pages/ReqisterPage.vue"),
+  },
+  ,
+  {
     path: "/",
     component: () => import("layouts/MainLayout.vue"),
     children: [
@@ -8,16 +19,6 @@ const routes = [
         path: "/menu",
         name: "menu",
         component: () => import("pages/MenuPage.vue"),
-      },
-      {
-        path: "/register",
-        name: "register",
-        component: () => import("pages/ReqisterPage.vue"),
-      },
-      {
-        path: "/login",
-        name: "login",
-        component: () => import("pages/LoginPage.vue"),
       },
       {
         path: "/menu-management",
@@ -34,7 +35,6 @@ const routes = [
         name: "dashboard",
         component: () => import("../pages/DashboardPage.vue"),
       },
-      { path: "/login", component: () => import("pages/LoginPage.vue") },
     ],
   },
 
