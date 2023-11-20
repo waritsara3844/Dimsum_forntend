@@ -28,7 +28,7 @@
 
 <script>
 import { defineComponent } from "vue";
-import { useUserStore } from "@vueuse/core";
+import { useUserStore } from "../Stores/user";
 
 export default defineComponent({
   name: "LoginPage",
@@ -51,7 +51,6 @@ export default defineComponent({
         .post("/user/login", userLogin)
         .then((res) => {
           this.userStore.user = res.userLogin;
-          console.log(res.data);
           this.$router.push("/menu");
         })
         .catch((err) => {

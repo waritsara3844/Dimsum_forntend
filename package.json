@@ -9,7 +9,7 @@
     "lint": "eslint --ext .js,.vue ./",
     "format": "prettier --write \"**/*.{js,vue,scss,html,md,json}\" --ignore-path .gitignore",
     "test": "echo \"No test specified\" && exit 0",
-    "dev": "quasar dev",
+    "dev": "quasar dev -m spa",
     "build": "quasar build"
   },
   "dependencies": {
@@ -17,6 +17,7 @@
     "@vueuse/core": "^10.5.0",
     "axios": "^1.6.0",
     "core-js": "^3.6.5",
+    "dayjs": "^1.11.10",
     "pinia": "^2.1.7",
     "quasar": "^2.6.0",
     "vue": "^3.0.0",
