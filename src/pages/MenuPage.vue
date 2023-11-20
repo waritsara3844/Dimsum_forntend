@@ -1,12 +1,12 @@
 <template>
-  <q-page class="q-pa-md row justify-center">
-    <div class="text-subtitle1 text-bold">Categories</div>
-    <div class="q-pt-md" style="max-width: 400px">
+  <q-page padding>
+    <div class="text-subtitle1 text-bold q-pl-md">Categories</div>
+    <div class="q-pt-md">
       <q-tabs
         v-model="tab"
         align="justify"
         narrow-indicator
-        class="q-mb-lg"
+        class="q-mb-md"
         no-caps
       >
         <q-tab name="all" label="All menu" />
@@ -19,18 +19,19 @@
       </q-tabs>
 
       <div class="q-gutter-y-lg">
-        <q-tab-panels v-model="tab" class="text-black bg-grey-2">
+        <q-tab-panels v-model="tab" class="text-black">
           <q-tab-panel name="all">
             <MenuCard
               class="q-my-md"
               v-for="allmenu in allmenus"
               :key="allmenu.id"
+              :menuId="allmenu.id"
               :menuName="allmenu.name"
               :menuDetail="allmenu.detail"
               :menuPrice="allmenu.price"
               :menuCategory="allmenu.category"
               :menuSold="allmenu.sold_amount"
-              :menuBuy="a"
+              @addMenuToCart="handleAddToCart"
             />
           </q-tab-panel>
           <q-tab-panel
@@ -42,12 +43,13 @@
               class="q-my-md"
               v-for="menu in filteredMenus(category)"
               :key="menu.id"
+              :menuId="menu.id"
               :menuName="menu.name"
               :menuDetail="menu.detail"
               :menuPrice="menu.price"
               :menuCategory="menu.category"
               :menuSold="menu.sold_amount"
-              :menuBuy="a"
+              @addMenuToCart="handleAddToCart"
             />
           </q-tab-panel>
         </q-tab-panels>
@@ -60,6 +62,7 @@
 import { defineComponent } from "vue";
 import { useUserStore } from "src/Stores/user";
 import MenuCard from "src/components/MenuCard.vue";
+import { api } from "src/boot/axios";
 
 export default defineComponent({
   name: "MenuPage",
@@ -100,6 +103,27 @@ export default defineComponent({
     filteredMenus(category) {
       // Filter menus by category
       return this.allmenus.filter((menu) => menu.category === category);
+    },
+    async handleAddToCart(menuData) {
+      try {
+        const { menuId, menuName, menuPrice, menuBuy } = menuData;
+        const headerss = {
+          "x-access-token": `${this.accessToken}`,
+        };
+        const cartData = {
+          cart_id: this.userStore.user.cart_id,
+          menu_id: menuId,
+          quantity: menuBuy,
+        };
+        const response = await api.post("/carts/menus/", cartData, {
+          headers: headerss,
+        });
+
+        console.log("Menu added to cart:", response.data);
+        // Optionally, you can update the cart state here
+      } catch (error) {
+        console.error("Error adding menu to cart:", error);
+      }
     },
   },
   components: { MenuCard },

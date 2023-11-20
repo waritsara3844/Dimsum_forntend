@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md" style="max-width: 400px">
+  <div class="q-pa-md row-justify-center" align="center">
     <div class="row justify-center text-h6 text-bold">Register</div>
     <q-form @submit.prevent="onSubmit" @reset.prevent="onReset" class="q-mt-sm">
       <div>
@@ -51,6 +51,7 @@
 </template>
 
 <script>
+import router from "src/router";
 import { defineComponent } from "vue";
 import { emailValidate, requiredValidate } from "../utils/validations";
 
@@ -77,7 +78,7 @@ export default defineComponent({
         .post("/user/signup", newUser)
         .then((res) => {
           console.log(res);
-          this.$router.push("/login");
+          this.$router.push("/");
         })
         .catch((err) => {
           err;

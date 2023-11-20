@@ -33,6 +33,7 @@
           style="border-radius: 15px"
           no-caps
           class="q-mr-sm"
+          @click="confirmOrder()"
         />
         <q-btn
           color="red-3"
@@ -40,6 +41,7 @@
           text-color="red"
           style="border-radius: 15px"
           no-caps
+          @click="canCelOrder"
         />
       </div>
     </div>
@@ -72,6 +74,18 @@ export default defineComponent({
       if (this.menuBuy > 0) {
         this.menuBuy--;
       }
+    },
+    confirmOrder() {
+      // Emit an event to notify the parent component (MenuPage)
+      this.$emit("addMenuToCart", {
+        menuId: this.menuId,
+        menuName: this.menuName,
+        menuPrice: this.menuPrice,
+        menuBuy: this.menuBuy,
+      });
+    },
+    canCelOrder() {
+      this.menuBuy = 0;
     },
   },
 });

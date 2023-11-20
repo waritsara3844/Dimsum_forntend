@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md" style="max-width: 1080px">
+  <div class="q-pa-md">
     <div class="row justify-center text-h6 text-bold">Login</div>
     <q-form
       @submit.prevent="loginUser"
@@ -18,7 +18,7 @@
         />
       </div>
 
-      <div>
+      <div class="row justify-center">
         <q-btn label="Log in" type="submit" color="orange" />
         <q-btn
           label="Register"
@@ -55,8 +55,11 @@ export default defineComponent({
           username: this.username,
           password: this.password,
         };
+        console.log(userLogin);
         const res = await api.post("/user/login", userLogin);
+
         this.userStore.user = res.data;
+        console.log(this.userStore.user);
         this.$router.push("/menu");
       } catch (error) {
         console.log(error);
