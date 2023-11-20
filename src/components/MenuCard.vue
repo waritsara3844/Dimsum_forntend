@@ -41,6 +41,7 @@
           text-color="red"
           style="border-radius: 15px"
           no-caps
+          @click="canCelOrder"
         />
       </div>
     </div>
@@ -82,6 +83,9 @@ export default defineComponent({
         menuPrice: this.menuPrice,
         menuBuy: this.menuBuy,
       });
+    },
+    canCelOrder() {
+      this.menuBuy = 0;
     },
   },
 });

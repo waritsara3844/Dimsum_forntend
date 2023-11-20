@@ -55,7 +55,9 @@ export default defineComponent({
           username: this.username,
           password: this.password,
         };
+        console.log(userLogin);
         const res = await api.post("/user/login", userLogin);
+
         this.userStore.user = res.data;
         console.log(this.userStore.user);
         this.$router.push("/menu");

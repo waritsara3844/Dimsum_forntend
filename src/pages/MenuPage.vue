@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <div class="text-subtitle1 text-bold">Categories</div>
+    <div class="text-subtitle1 text-bold q-pl-md">Categories</div>
     <div class="q-pt-md">
       <q-tabs
         v-model="tab"
