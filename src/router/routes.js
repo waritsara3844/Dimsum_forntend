@@ -1,23 +1,24 @@
 const routes = [
   {
     path: "/",
+    name: "login",
+    component: () => import("pages/LoginPage.vue"),
+  },
+  {
+    path: "/register",
+    name: "register",
+    component: () => import("pages/ReqisterPage.vue"),
+  },
+  ,
+  {
+    path: "/",
     component: () => import("layouts/MainLayout.vue"),
     children: [
-      { path: "", component: () => import("pages/IndexPage.vue") },
+      // { path: "", component: () => import("pages/IndexPage.vue") },
       {
         path: "/menu",
         name: "menu",
         component: () => import("pages/MenuPage.vue"),
-      },
-      {
-        path: "/register",
-        name: "register",
-        component: () => import("pages/ReqisterPage.vue"),
-      },
-      {
-        path: "/login",
-        name: "login",
-        component: () => import("pages/LoginPage.vue"),
       },
       {
         path: "/menu-management",
@@ -32,7 +33,7 @@ const routes = [
       {
         path: "/dashboard",
         name: "dashboard",
-        component: () => import("../pages/dashboardPage.vue"),
+        component: () => import("../pages/DashboardPage.vue"),
       },
     ],
   },

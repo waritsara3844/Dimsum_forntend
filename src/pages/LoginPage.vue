@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md" style="max-width: 400px">
+  <div class="q-pa-md">
     <div class="row justify-center text-h6 text-bold">Login</div>
     <q-form
       @submit.prevent="loginUser"
@@ -18,22 +18,33 @@
         />
       </div>
 
-      <div>
+      <div class="row justify-center">
         <q-btn label="Log in" type="submit" color="orange" />
-        <q-btn label="Register" type="reset" color="red" class="q-ml-sm" />
+        <q-btn
+          label="Register"
+          color="red"
+          class="q-ml-sm"
+          @click="this.$router.push('/register')"
+        />
       </div>
     </q-form>
   </div>
 </template>
 
 <script>
+import { useUserStore } from "src/Stores/user";
+import { api } from "src/boot/axios";
 import { defineComponent } from "vue";
+<<<<<<< HEAD
 import { useUserStore } from "../Stores/user";
+=======
+>>>>>>> origin/develop
 
 export default defineComponent({
   name: "LoginPage",
   data() {
-    const userStore = useUserStore;
+    const userStore = useUserStore();
+
     return {
       username: "",
       password: "",
@@ -42,20 +53,25 @@ export default defineComponent({
     };
   },
   methods: {
-    loginUser() {
-      const userLogin = {
-        username: this.username,
-        password: this.password,
-      };
-      this.$api
-        .post("/user/login", userLogin)
-        .then((res) => {
-          this.userStore.user = res.userLogin;
-          this.$router.push("/menu");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    async loginUser() {
+      try {
+        const userLogin = {
+          username: this.username,
+          password: this.password,
+        };
+        console.log(userLogin);
+        const res = await api.post("/user/login", userLogin);
+
+        this.userStore.user = res.data;
+        console.log(this.userStore.user);
+        this.$router.push("/menu");
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    onReset() {
+      this.username = "";
+      this.password = "";
     },
   },
 });

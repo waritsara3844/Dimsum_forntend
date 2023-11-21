@@ -6,6 +6,13 @@ import {
   createWebHashHistory,
 } from "vue-router";
 import routes from "./routes";
+import { createPinia } from "pinia";
+import { createApp } from "vue";
+import App from "../App.vue";
+
+const pinia = createPinia();
+const app = createApp(App);
+app.use(pinia);
 
 /*
  * If not building with SSR mode, you can
@@ -30,7 +37,9 @@ export default route(function (/* { store, ssrContext } */) {
     // Leave this as is and make changes in quasar.conf.js instead!
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
-    history: createHistory(process.env.VUE_ROUTER_BASE),
+    history: createHistory(
+      process.env.MODE === "ssr" ? void 0 : process.env.VUE_ROUTER_BASE
+    ),
   });
 
   return Router;
