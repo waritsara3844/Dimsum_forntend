@@ -14,6 +14,17 @@ const api = axios.create({
   timeout: 5000,
 });
 
+api.interceptors.request.use((config) => {
+  const token =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2OTk5MzgxODksImV4cCI6MTY5OTk0NTM4OX0.ifJXpzbgZqEx0xGcJ6jR8oXVrNISl5ahd3FGMrvJPow";
+
+  if (token) {
+    config.headers["x-access-token"] = token;
+  }
+
+  return config;
+});
+
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
 

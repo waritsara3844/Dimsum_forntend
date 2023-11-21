@@ -32,11 +32,7 @@
           class="text-grey-6"
           v-model="tab"
         >
-          <q-tab
-            name="detail"
-            icon="store"
-            @click="$router.push({ name: 'menu' })"
-          >
+          <q-tab name="detail" icon="store">
             <div style="font-size: 12px; font-weight: 500">Detail</div>
           </q-tab>
           <q-tab

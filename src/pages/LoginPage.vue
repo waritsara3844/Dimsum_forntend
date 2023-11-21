@@ -35,6 +35,10 @@
 import { useUserStore } from "src/Stores/user";
 import { api } from "src/boot/axios";
 import { defineComponent } from "vue";
+<<<<<<< HEAD
+import { useUserStore } from "../Stores/user";
+=======
+>>>>>>> origin/develop
 
 export default defineComponent({
   name: "LoginPage",
