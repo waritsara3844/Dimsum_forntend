@@ -96,7 +96,7 @@ const tab = ref(`images`);
 
 const logoutUser = () => {
   try {
-    userStore.user = {};
+    userStore.user = "";
   } catch (error) {
     console.log("🚀 ~ logoutUser ~ error:", error);
   }
