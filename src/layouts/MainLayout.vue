@@ -90,15 +90,13 @@ import { createRouter, useRouter } from "vue-router";
 
 const userStore = useUserStore();
 const $router = useRouter();
-const username = "";
-const password = "";
 const user = {};
 
 const tab = ref(`images`);
 
 const logoutUser = () => {
   try {
-    (username = ""), (username = "");
+    userStore.user = {};
   } catch (error) {
     console.log("🚀 ~ logoutUser ~ error:", error);
   }
