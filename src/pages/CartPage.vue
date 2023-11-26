@@ -42,7 +42,7 @@
               {{ item.name }}
             </div>
             <div class="col flex d-flex flex-center q-ma-md">
-              {{ item.price }} THB
+              {{ item.price }} THB/Piece
             </div>
           </div>
           <q-separator />
@@ -82,12 +82,15 @@
 import { getMenuInCartById, updateMenuInCart } from "src/api/cart";
 import { createOrder } from "src/api/order";
 import { onMounted, ref } from "vue";
+import { useUserStore } from "../Stores/user";
 
 const menus = ref([]);
 const totalAmount = ref(0);
-const user = ref({ cart_id: 8, id: 13 });
+const userStore = useUserStore();
+const user = ref();
 
 onMounted(() => {
+  user.value = userStore.user;
   initialMenu();
 });
 

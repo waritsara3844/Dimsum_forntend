@@ -35,10 +35,6 @@
 import { useUserStore } from "src/Stores/user";
 import { api } from "src/boot/axios";
 import { defineComponent } from "vue";
-<<<<<<< HEAD
-import { useUserStore } from "../Stores/user";
-=======
->>>>>>> origin/develop
 
 export default defineComponent({
   name: "LoginPage",
@@ -59,11 +55,10 @@ export default defineComponent({
           username: this.username,
           password: this.password,
         };
-        console.log(userLogin);
         const res = await api.post("/user/login", userLogin);
+        console.log("🚀 ~ loginUser ~ res:", res.data);
 
         this.userStore.user = res.data;
-        console.log(this.userStore.user);
         this.$router.push("/menu");
       } catch (error) {
         console.log(error);

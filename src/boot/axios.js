@@ -1,5 +1,6 @@
 import { boot } from "quasar/wrappers";
 import axios from "axios";
+import { useUserStore } from "../Stores/user";
 
 // Be careful when using SSR for cross-request state pollution
 // due to creating a Singleton instance here;
@@ -7,7 +8,7 @@ import axios from "axios";
 // good idea to move this instance creation inside of the
 // "export default () => {}" function below (which runs individually
 // for each client)
-const RESTAPI = "http://localhost:5555/api";
+const RESTAPI = "http://localhost:3000/api";
 const api = axios.create({
   baseURL: RESTAPI,
   headers: { "Content-Type": "application/json" },
@@ -15,8 +16,8 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2OTk5MzgxODksImV4cCI6MTY5OTk0NTM4OX0.ifJXpzbgZqEx0xGcJ6jR8oXVrNISl5ahd3FGMrvJPow";
+  const userStore = useUserStore();
+  const token = userStore.user.accessToken;
 
   if (token) {
     config.headers["x-access-token"] = token;

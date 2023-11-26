@@ -27,7 +27,7 @@
       </div>
       <div align="center" class="q-pt-md" v-if="menuBuy > 0">
         <q-btn
-          color="green-3"
+          color="green-2"
           label="Confirm"
           text-color="green"
           style="border-radius: 15px"
@@ -36,7 +36,7 @@
           @click="confirmOrder()"
         />
         <q-btn
-          color="red-3"
+          color="red-2"
           label="Cancel"
           text-color="red"
           style="border-radius: 15px"
@@ -83,6 +83,8 @@ export default defineComponent({
         menuPrice: this.menuPrice,
         menuBuy: this.menuBuy,
       });
+
+      this.menuBuy = 0;
     },
     canCelOrder() {
       this.menuBuy = 0;

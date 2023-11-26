@@ -25,7 +25,7 @@
     </div>
 
     <div class="q-pa-md">
-      <q-table title="Treats" :rows="rows" :columns="columns" row-key="name" />
+      <q-table title="Ranking" :rows="rows" :columns="columns" row-key="name" />
     </div>
   </q-page>
 </template>
@@ -81,13 +81,12 @@ const initialDashboard = async () => {
     getRanking(),
   ]);
 
-  rows.value = rankings.data.map((index) => {
-    // Add the 'no' property to each item in ranking data
+  rows.value = rankings.data.map((ranking, index) => {
     return {
-      no: index + 1, // Assign the ranking number starting from 1
+      ...ranking,
+      no: index + 1,
     };
   });
-
   days.value = report.data
     .filter((val) => {
       return dayjs(val.date).isSame(dayjs(), "days");

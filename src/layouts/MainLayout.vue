@@ -15,8 +15,21 @@
             style="font-weight: bold; color: #ff5c00; font-size: 24px"
             >Dimsum</q-toolbar-title
           >
-          <q-btn flat dense round icon="shopping_cart" />
-          <q-btn class="q-ml-md" flat round dense icon="logout" />
+          <q-btn
+            flat
+            dense
+            round
+            icon="shopping_cart"
+            @click="$router.push({ name: 'cart' })"
+          />
+          <q-btn
+            class="q-ml-md"
+            flat
+            round
+            dense
+            icon="logout"
+            @click="logoutUser"
+          />
         </q-toolbar>
       </q-header>
 
@@ -32,7 +45,11 @@
           class="text-grey-6"
           v-model="tab"
         >
-          <q-tab name="detail" icon="store">
+          <q-tab
+            name="detail"
+            icon="store"
+            @click="$router.push({ name: 'menu' })"
+          >
             <div style="font-size: 12px; font-weight: 500">Detail</div>
           </q-tab>
           <q-tab
@@ -68,6 +85,23 @@
 
 <script setup>
 import { ref } from "vue";
+import { useUserStore } from "../Stores/user";
+import { createRouter, useRouter } from "vue-router";
+
+const userStore = useUserStore();
+const $router = useRouter();
+const username = "";
+const password = "";
+const user = {};
 
 const tab = ref(`images`);
+
+const logoutUser = () => {
+  try {
+    (username = ""), (username = "");
+  } catch (error) {
+    console.log("🚀 ~ logoutUser ~ error:", error);
+  }
+  $router.push({ name: "login" });
+};
 </script>
